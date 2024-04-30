@@ -1,0 +1,19 @@
+body{
+    background-color: green
+}
+
+#get-card-btn{
+    display: none;
+}
+
+#card-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.cards{
+    position: absolute;
+    top: 50px;
+}
