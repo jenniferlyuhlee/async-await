@@ -1,33 +1,52 @@
 const baseUrl = 'http://numbersapi.com';
 
 //1
-let random_fact = axios.get(`${baseUrl}/15?json`)
-.then(data => {
-    $("#fav-num").append(`<li>${data.data.text}</li>`)
-})
-.catch(err => {console.log(err)});
+async function random_fact(){
+    try{
+        let resp = await axios.get(`${baseUrl}/15?json`);
+        let fact = resp.data.text
+        $("#fav-num").append(`<li>${fact}</li>`)
+    }
+    catch(e){
+        $("#fav-num").append(e)
+    }
+}
+random_fact()
 
 
 //2
-let favNums = [8, 27, 99]
-let random_facts = axios.get(`${baseUrl}/${favNums}?json`)
-.then(data => {
-    for (let num of favNums){
-        console.log(data.data[num])
-        $("#fav-nums").append(`<li>${data.data[num]}</li>`)
+async function random_facts(nums){
+    try{
+        let resp = await axios.get(`${baseUrl}/${nums}?json`)
+        let facts = resp.data
+        for (let num of nums){
+            $("#fav-nums").append(`<li>${facts[num]}</li>`)
+        }
     }
-})
-.catch(err => {console.log(err)});
+    catch(e){
+        $("#fav-nums").append(e)
+    }
+}
+random_facts([8, 27, 99])
 
 
 //3
-let promises=[]
-for (let i=1; i<5; i++){
-    promises.push(axios.get(`${baseUrl}/3?json`));
-}
+async function four_facts(){
+    try{
+        let facts = await Promise.all([
+            axios.get(`${baseUrl}/3?json`),
+            axios.get(`${baseUrl}/3?json`),
+            axios.get(`${baseUrl}/3?json`),
+            axios.get(`${baseUrl}/3?json`)
+        ]);
+    
+        facts.forEach(data => {
+            $("#four-facts").append(`<li>${data.data.text}</li>`)
+            })
+    }
+    catch(e){
+        $("#four-facts").append(e)
+    }
 
-Promise.all(promises)
-.then(arr => {
-    arr.forEach(fact => $("#four-facts").append(`<li>${fact.data.text}</li>`))
-})
-.catch(err => {console.log(err)});
+}
+four_facts()
